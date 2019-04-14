@@ -1,4 +1,4 @@
-const Genre = require('../models/genre');
+const {Genre,validate} = require('../models/genre');
 
 // Find genres 
 module.exports.getGenres = async function getGenres() {
@@ -22,9 +22,11 @@ module.exports.findById = async function findById(id) {
 }
 
 // Create genre 
-module.exports.createGenre = async function createGenre(name) {
+module.exports.createGenre = async function createGenre(g) {
+    const { error } = validate(g);
+    if (error) return error.details[0].message;
     const genre = new Genre({
-        name: name,
+        name: g.name,
     })
     try {
         await genre.validate();

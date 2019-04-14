@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Joi = require('joi');
 
 mongoose.connect('mongodb://localhost/vidly')
     .then(()=>console.log(' Connected to Vidly DB ..'))
@@ -11,5 +12,14 @@ const GenreSchema = new mongoose.Schema({
 
 const Genre = mongoose.model('Genre',GenreSchema);
 
-module.exports = Genre;
+function validateGenre(genre) {
+    const schema = {
+        name: Joi.string().min(3).required()
+    }
+    return Joi.validate(genre, schema);
+}
+
+
+module.exports.Genre = Genre;
+module.exports.validate = validateGenre;
 
