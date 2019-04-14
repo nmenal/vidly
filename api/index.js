@@ -42,12 +42,12 @@ app.use('/api/genres',genres)
 app.use('/',home)
 
 //Configuration
-startupDebugger('Application Name: ' + config.get('name'))
-startupDebugger('Mail Server Name: ' + config.get('mail.host'))
-// startupDebugger('Mail Password: ' + config.get('mail.password'))
+startupDebugger('Application Name: ' + config.get('name'));
+startupDebugger('Mail Server Name: ' + config.get('mail.host'));
+// startupDebugger('Mail Password: ' + config.get('mail.password'))s
  
 //db debug
-dbDebugger('db')
+dbDebugger('db');
 
 const port = process.env.PORT || 3000;
 
