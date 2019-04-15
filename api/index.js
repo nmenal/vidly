@@ -7,6 +7,7 @@ const dbDebugger = require('debug')('app:db');
 const logger = require('./middleware/logger');
 const authentication = require('./middleware/authentication');
 const genres = require('./routes/genres')
+const movies = require('./routes/movies')
 const home = require('./routes/home')
 
 const app = express();
@@ -38,13 +39,14 @@ app.use(logger);
 app.use(authentication);
 
 //Routes
-app.use('/api/genres',genres)
-app.use('/',home)
+app.use('/api/genres',genres);
+app.use('/api/movies',movies);
+app.use('/',home);
 
 //Configuration
 startupDebugger('Application Name: ' + config.get('name'));
 startupDebugger('Mail Server Name: ' + config.get('mail.host'));
-// startupDebugger('Mail Password: ' + config.get('mail.password'))s
+// startupDebugger('Mail Password: ' + config.get('mail.password'))
  
 //db debug
 dbDebugger('db');
