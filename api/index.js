@@ -2,15 +2,27 @@ const config = require('config');
 const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const mongoose =require('mongoose');
 const startupDebugger = require('debug')('app:startup');
 const dbDebugger = require('debug')('app:db');
 const logger = require('./middleware/logger');
-const authentication = require('./middleware/authentication');
-const genres = require('./routes/genres')
-const movies = require('./routes/movies')
-const home = require('./routes/home')
+const authentication = require('./middleware/auth');
+const genres = require('./routes/genres');
+const movies = require('./routes/movies');
+const users = require('./routes/users');
+const auth = require('./routes/auth');
+const home = require('./routes/home');
 
 const app = express();
+
+if(!config.get('jwtPrivateKey')){
+    console.error('FATAL ERROR: jwtPrivateKey is not defined.');
+    process.exit(1);
+}
+
+mongoose.connect('mongodb://localhost/vidly')
+    .then(()=>console.log(' Connected to Vidly DB ..'))
+    .catch(()=>console.log(' Cannot connecte to Vidly DB ..'));
 
 startupDebugger(app.get('env'));
 
@@ -36,11 +48,13 @@ if(app.get('env') ==='development'){
 
 //costum middlware
 app.use(logger);
-app.use(authentication);
+// app.use(auth);
 
 //Routes
 app.use('/api/genres',genres);
 app.use('/api/movies',movies);
+app.use('/api/users',users);
+app.use('/api/auth',auth);
 app.use('/',home);
 
 //Configuration

@@ -2,10 +2,6 @@ const mongoose = require('mongoose');
 const Joi = require('joi');
 const { GenreSchema } = require('../models/genre');
 
-mongoose.connect('mongodb://localhost/vidly')
-    .then(() => console.log('Connected to vidly Db ..'))
-    .catch(() => console.log('Cannot connect to vidly Db ..'));
-
 const movieSchema = new mongoose.Schema({
     title: {
         type: String,

@@ -27,6 +27,10 @@ module.exports.findById = async (req, res, next) => {
 
 // Create genre 
 module.exports.createGenre = async (req, res, next) => {
+
+    const token = req.header('x-auth-token');
+    res.status(401);
+
     const { error } = validate(req.body);
     if (error) return error.details[0].message;
     const genre = new Genre({
