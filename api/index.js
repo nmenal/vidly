@@ -16,7 +16,7 @@ const home = require('./routes/home');
 const app = express();
 
 if(!config.get('jwtPrivateKey')){
-    startupDebugger.error('FATAL ERROR: jwtPrivateKey is not defined.');
+    startupDebugger('FATAL ERROR: jwtPrivateKey is not defined.');
     process.exit(1);
 }
 
