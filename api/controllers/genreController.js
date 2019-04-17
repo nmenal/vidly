@@ -3,7 +3,8 @@ const { Genre, validate } = require('../models/genre');
 // Find genres 
 module.exports.getGenres = async (req, res, next) => {
     const genres = await Genre.find();
-    if (!genres) return res.satatus(404).send("No items found");
+    if (!genres) 
+    return res.status(404).send("No items found");
     res.send(genres);
 }
 
