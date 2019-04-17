@@ -1,3 +1,4 @@
+require('express-async-errors');
 const config = require('config');
 const express = require('express');
 const helmet = require('helmet');
@@ -21,8 +22,8 @@ if(!config.get('jwtPrivateKey')){
 }
 
 mongoose.connect('mongodb://localhost/vidly')
-    .then(()=>console.log(' Connected to Vidly DB ..'))
-    .catch(()=>console.log(' Cannot connecte to Vidly DB ..'));
+    .then(()=>startupDebugger(' Connected to Vidly DB ..'))
+    .catch(()=>startupDebugger(' Cannot connecte to Vidly DB ..'));
 
 startupDebugger(app.get('env'));
 
