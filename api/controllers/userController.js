@@ -1,17 +1,18 @@
+/*eslint no-console: "error"*/
 
 const { User, validate , hash } = require('../models/user');
 const _ = require('lodash');
 
 // Find users 
-module.exports.getUsers = async (req, res, next) => {
+module.exports.getUsers = async (req, res) => {
     try {
         const users = await User.find();
         if (!users) return res.status(400).send("No items found");
         else res.send(users);
     } catch (error) {
-        res.status(400).send(err.message);
+        res.status(400).send(error.message);
     }
-}
+};
 
 // FindById 
 module.exports.findById = async (req, res, next) => {

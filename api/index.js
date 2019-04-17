@@ -7,6 +7,7 @@ const startupDebugger = require('debug')('app:startup');
 const dbDebugger = require('debug')('app:db');
 const logger = require('./middleware/logger');
 const authentication = require('./middleware/auth');
+const error = require('./middleware/error')
 const genres = require('./routes/genres');
 const movies = require('./routes/movies');
 const users = require('./routes/users');
@@ -56,6 +57,7 @@ app.use('/api/movies',movies);
 app.use('/api/users',users);
 app.use('/api/auth',auth);
 app.use('/',home);
+app.use(error());
 
 //Configuration
 startupDebugger('Application Name: ' + config.get('name'));

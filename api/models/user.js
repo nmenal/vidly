@@ -1,12 +1,8 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
-const jwt =require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const config = require('config');
-
-mongoose.connect('mongodb://localhost/vidly')
-    .then(()=>console.log(' Connected to Vidly DB ..'))
-    .catch(()=>console.log(' Cannot connecte to Vidly DB ..'));
 
 
 const userSchema = new mongoose.Schema({
@@ -29,15 +25,16 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 5,
         maxlength: 255,
-    }
+    },
+    isAdmin: Boolean
 });
 
 userSchema.methods.generateAuthToken = function () {
-    const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'));
+    const token = jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, config.get('jwtPrivateKey'));
     return token;
 }
 
-const User = mongoose.model('User',userSchema);
+const User = mongoose.model('User', userSchema);
 
 function validateUser(user) {
     const schema = {
@@ -48,7 +45,7 @@ function validateUser(user) {
     return Joi.validate(user, schema);
 }
 
-async function hash(password){
+async function hash(password) {
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash(password, salt)
     return hashed;

@@ -1,5 +1,6 @@
 const express = require('express');
 const {auth} = require('../middleware/auth');
+const {admin} = require('../middleware/admin');
 const router = express.Router();
 const genreController = require('../controllers/genreController');
 
@@ -11,6 +12,6 @@ router.post('/', auth, genreController.createGenre);
 
 router.put('/:id', genreController.updateGenre);
 
-router.delete('/:id', genreController.deleteGenre);
+router.delete('/:id',[auth,  admin], genreController.deleteGenre);
 
 module.exports = router;
