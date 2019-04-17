@@ -10,16 +10,12 @@ module.exports.find = async (req, res, next) => {
 
 // Find a movie by id 
 module.exports.findById = async (req, res, next) => {
-    try {
-        const movie = await Movie.findById({ _id: req.params.id }, function (err, movie) {
-            if (err) return err
-            else return movie
-        }).exec()
-        if (!movie) return res.status(404).send('Not found movie with given Id !');
-        else res.send(movie);
-    } catch (error) {
-        return error
-    }
+    const movie = await Movie.findById({ _id: req.params.id }, function (err, movie) {
+        if (err) return err
+        else return movie
+    }).exec()
+    if (!movie) return res.status(404).send('Not found movie with given Id !');
+    res.send(movie);
 }
 
 // Add a movie
@@ -39,45 +35,35 @@ module.exports.createMovie = async (req, res, next) => {
         numberInStock: req.body.numberInStock,
         dailyRentalRate: req.body.dailyRentalRate
     })
-    try {
-        // movie.Validate()
-        const result = await movie.save();
-        if (!result) res.status(404).send("couldn't add the movie");
-        else res.send(result);
-    } catch (error) {
-        console.log("error :",error);
-        res.status(404).send(error.message);
-    }
+    // movie.Validate()
+    const result = await movie.save();
+    if (!result) res.status(404).send("couldn't add the movie");
+    res.send(result);
 }
 
 // Update a movie
 module.exports.updateMovie = async (req, res, next) => {
-    const { error } = Validate(req.body); 
+    const { error } = Validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
-  
+
     const genre = await Genre.findById(req.body.genreId);
     if (!genre) return res.status(400).send('Invalid genre.');
-  
+
     console.log(genre)
-    
-    try {
-        const movie = await Movie.findByIdAndUpdate(req.params.id,
-            { 
-              title: req.body.title,
-              genre: {
+    const movie = await Movie.findByIdAndUpdate(req.params.id,
+        {
+            title: req.body.title,
+            genre: {
                 _id: genre._id,
                 name: genre.name
-              },
-              numberInStock: req.body.numberInStock,
-              dailyRentalRate: req.body.dailyRentalRate
-            }, { new: true });
-        
-          if (!movie) return res.status(404).send('The movie with the given ID was not found.');
-          
-          res.send(movie);
-    } catch (error) {
-        res.send(error)
-    }
+            },
+            numberInStock: req.body.numberInStock,
+            dailyRentalRate: req.body.dailyRentalRate
+        }, { new: true });
+
+    if (!movie) return res.status(404).send('The movie with the given ID was not found.');
+
+    res.send(movie);
 }
 
 // Delete a movie

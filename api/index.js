@@ -6,8 +6,7 @@ const mongoose =require('mongoose');
 const startupDebugger = require('debug')('app:startup');
 const dbDebugger = require('debug')('app:db');
 const logger = require('./middleware/logger');
-const authentication = require('./middleware/auth');
-const error = require('./middleware/error')
+const error = require('./middleware/error');
 const genres = require('./routes/genres');
 const movies = require('./routes/movies');
 const users = require('./routes/users');
@@ -17,7 +16,7 @@ const home = require('./routes/home');
 const app = express();
 
 if(!config.get('jwtPrivateKey')){
-    console.error('FATAL ERROR: jwtPrivateKey is not defined.');
+    startupDebugger.error('FATAL ERROR: jwtPrivateKey is not defined.');
     process.exit(1);
 }
 
@@ -57,7 +56,7 @@ app.use('/api/movies',movies);
 app.use('/api/users',users);
 app.use('/api/auth',auth);
 app.use('/',home);
-app.use(error());
+app.use(error);
 
 //Configuration
 startupDebugger('Application Name: ' + config.get('name'));
