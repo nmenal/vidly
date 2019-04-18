@@ -1,17 +1,17 @@
 const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const { auth } = require('../middleware/auth');
-const { asyncMiddleware } = require('../middleware/async');
 
-router.get('/', asyncMiddleware(userController.getUsers));
+router.get('/', userController.getUsers);
 
-router.get('/me', asyncMiddleware(auth, userController.findById));
+router.get('/me', auth, userController.findById);
 
-router.post('/', asyncMiddleware(userController.createUser));
+router.post('/', userController.createUser);
 
-router.put('/:id', asyncMiddleware(userController.updateUser));
+router.put('/:id', userController.updateUser);
 
-router.delete('/:id', asyncMiddleware(userController.deleteUser));
+router.delete('/:id', userController.deleteUser);
 
 module.exports = router;

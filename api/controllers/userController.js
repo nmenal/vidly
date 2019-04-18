@@ -1,6 +1,4 @@
-/*eslint no-console: "error"*/
-
-const { User, validate, hash } = require('../models/user');
+const { User, validate, validatePassword, hash } = require('../models/user');
 const _ = require('lodash');
 
 // Find users 
@@ -19,15 +17,21 @@ module.exports.findById = async (req, res, next) => {
 
 // Create user 
 module.exports.createUser = async (req, res, next) => {
-    const { error } = validate(req.body);
+    let { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
     let user = await User.findOne({ email: req.body.email })
     if (user) return res.status(400).send('User with given Email already registred !');
 
+    ({ error } = validatePassword(req.body.password));
+    if (error) return res.status(400).send(error.details[0].message);
+    
     user = new User(_.pick(req.body, ['name', 'email', 'password']));
+
+    // Hash Password 
     user.password = await hash(user.password);
 
+    // Validate users 
     await user.validate();
     const result = await user.save();
     if (!result) return res.status(400).send("couldn't add the user");

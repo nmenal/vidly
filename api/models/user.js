@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
+const PasswordComplexity = require('joi-password-complexity');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const config = require('config');
-
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -45,6 +45,20 @@ function validateUser(user) {
     return Joi.validate(user, schema);
 }
 
+function validatePassword(password){
+    
+    const complexityOptions = {
+        min: 8,
+        max: 30,
+        lowerCase: 1,
+        upperCase: 1,
+        numeric: 1,
+        symbol: 1,
+        requirementCount: 2,
+    }
+    return Joi.validate(password, new PasswordComplexity(complexityOptions));
+}
+
 async function hash(password) {
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash(password, salt)
@@ -54,4 +68,5 @@ async function hash(password) {
 module.exports.hash = hash;
 module.exports.User = User;
 module.exports.validate = validateUser;
+module.exports.validatePassword = validatePassword;
 
