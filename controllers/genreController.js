@@ -3,18 +3,18 @@ const { Genre, validate } = require('../models/genre');
 // Find genres 
 module.exports.getGenres = async (req, res, next) => {
     const genres = await Genre.find();
-    if (!genres) 
-    return res.status(404).send("No items found");
+    if (!genres) return res.status(404).send("No items found");
     res.send(genres);
 }
 
 // FindById 
 module.exports.findById = async (req, res, next) => {
+
     const genre = await Genre.findById({ _id: req.params.id }, function (err, genre) {
         if (err) return err
         else return genre
     }).exec();
-    if (!genre) res.status(404).send('Not found genre with given Id !');
+    if (!genre) return res.status(404).send('Not found genre with given Id !');
     res.send(genre)
 }
 
@@ -31,7 +31,7 @@ module.exports.createGenre = async (req, res, next) => {
     })
     await genre.validate();
     const result = await genre.save();
-    if (!result) res.status(404).send("couldn't add the genre");
+    if (!result) return res.status(404).send("couldn't add the genre");
     else res.send(result);
 }
 
