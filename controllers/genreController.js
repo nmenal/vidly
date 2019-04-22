@@ -37,13 +37,13 @@ module.exports.createGenre = async (req, res, next) => {
 // Update genre 
 module.exports.updateGenre = async (req, res, next) => {
     const { error } = validate(req.body);
-    if (error) return error.details[0].message;
+    if (error) return res.status(404).send(error.details[0].message);
 
     const genre = await Genre.findByIdAndUpdate({ _id: req.params.id }, { name: req.body.name }, {
         new: true
     });
-
     if (!genre) return res.status(404).send('No such item with given id');
+    
     res.send(genre);
 }
 
